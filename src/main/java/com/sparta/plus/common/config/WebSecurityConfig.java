@@ -1,4 +1,4 @@
-package com.sparta.plus.common;
+package com.sparta.plus.common.config;
 
 import com.sparta.plus.common.security.AuthorizationFilter;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class Config {
+public class WebSecurityConfig {
 
     private final UserDetailsService userDetailsService;
 
