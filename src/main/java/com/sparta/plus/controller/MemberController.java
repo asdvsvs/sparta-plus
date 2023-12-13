@@ -4,9 +4,8 @@ import com.sparta.plus.common.Response;
 import com.sparta.plus.dto.request.MemberLoginReq;
 import com.sparta.plus.dto.request.MemberSignupReq;
 import com.sparta.plus.service.MemberService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import java.net.URLEncoder;
+import java.io.UnsupportedEncodingException;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,40 +27,38 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    private static ResponseEntity<Response> validateReq(BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(new Response(
+                Objects.requireNonNull(
+                    bindingResult.getFieldErrors().stream()
+                        .map((e) -> e.getField() + " : " + e.getDefaultMessage())
+                        .toList().toString()), HttpStatus.BAD_REQUEST.value()));
+        }
+        return null;
+    }
+
     @PostMapping
     public ResponseEntity<Response> signup(
-        @Validated @ModelAttribute MemberSignupReq memberSignupReq,
-        BindingResult bindingResult) {
-        try {
-            if (bindingResult.hasErrors()) {
-                return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST.value(),
-                    Objects.requireNonNull(
-                        bindingResult.getFieldErrors().stream()
-                            .map((e) -> e.getField() + " : " + e.getDefaultMessage())
-                            .toList().toString())));
-            }
-            memberService.signup(memberSignupReq);
-            return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(), "성공"));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                .body(new Response(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+        @Validated @ModelAttribute MemberSignupReq memberSignupReq, BindingResult bindingResult) {
+        ResponseEntity<Response> reqHasError = validateReq(bindingResult);
+        if (reqHasError != null) {
+            return reqHasError;
         }
+
+        memberService.signup(memberSignupReq);
+        return ResponseEntity.ok().body(new Response("성공", HttpStatus.OK.value()));
     }
 
     @PostMapping("/login")
     public ResponseEntity<Response> login(@RequestBody MemberLoginReq memberLoginReq,
-        HttpServletResponse response) {
-        try {
-            String token = memberService.login(memberLoginReq);
-            token = URLEncoder.encode(token, "utf-8")
-                .replaceAll("\\+", "//"); // Cookie Value 에는 공백이 불가능해서 encoding 진행
-            Cookie cookie = new Cookie("Authorization", token);
-            cookie.setPath("/");
-            response.addCookie(cookie);
-            return ResponseEntity.ok().body(new Response(HttpStatus.OK.value(), "성공"));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                .body(new Response(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
-        }
+        HttpServletResponse response) throws UnsupportedEncodingException {
+
+        String token = memberService.login(memberLoginReq);
+        memberService.setCookie(response, token);
+        return ResponseEntity.ok().body(new Response("성공", HttpStatus.OK.value()));
+
     }
+
+
 }

@@ -8,6 +8,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
@@ -76,5 +80,14 @@ public class MemberService {
                 .setIssuedAt(date) // 발급일
                 .signWith(key, signatureAlgorithm) // 암호화 알고리즘
                 .compact();
+    }
+
+    public void setCookie(HttpServletResponse response, String token)
+        throws UnsupportedEncodingException {
+        token = URLEncoder.encode(token, "utf-8")
+            .replaceAll("\\+", "//"); // Cookie Value 에는 공백이 불가능해서 encoding 진행
+        Cookie cookie = new Cookie("Authorization", token);
+        cookie.setPath("/");
+        response.addCookie(cookie);
     }
 }
