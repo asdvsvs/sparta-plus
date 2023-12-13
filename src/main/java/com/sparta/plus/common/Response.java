@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Response {
 
-    private Integer status;
     private String message;
+    private Integer status;
 }
