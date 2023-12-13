@@ -1,9 +1,10 @@
-package com.sparta.plus.service;
+package com.sparta.plus.service.impl;
 
 import com.sparta.plus.dto.request.MemberLoginReq;
 import com.sparta.plus.dto.request.MemberSignupReq;
 import com.sparta.plus.entity.Member;
 import com.sparta.plus.repository.MemberRepository;
+import com.sparta.plus.service.interfaces.MemberService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -22,7 +23,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MemberService {
+public class MemberServiceImpl implements MemberService {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String BEARER_PREFIX = "Bearer ";
@@ -33,6 +34,7 @@ public class MemberService {
     private String secretKey = "7Iqk7YyM66W07YOA7L2U65Sp7YG065+9U3ByaW5n6rCV7J2Y7Yqc7YSw7LWc7JuQ67mI7J6F64uI64ukLg==";
     private Key key;
 
+    @Override
     public void signup(MemberSignupReq memberSignupReq) {
 
         if (Objects.equals(memberSignupReq.getMemberName(), memberSignupReq.getPassword())) {
@@ -53,6 +55,7 @@ public class MemberService {
             .build());
     }
 
+    @Override
     public String login(MemberLoginReq memberLoginReq) {
         Member member = memberRepository.findByMemberName(memberLoginReq.getMemberName());
         if (!Objects.equals(memberLoginReq.getMemberName(), member.getMemberName()) ||
@@ -62,14 +65,16 @@ public class MemberService {
         return createToken(member.getMemberName());
     }
 
+    @Override
     @PostConstruct
     public void init() {
         byte[] bytes = Base64.getDecoder().decode(secretKey);
         key = Keys.hmacShaKeyFor(bytes);
     }
 
+    @Override
     // 토큰 생성
-    private String createToken(String memberName) {
+    public String createToken(String memberName) {
         Date date = new Date();
 
         return BEARER_PREFIX +
@@ -82,6 +87,7 @@ public class MemberService {
                 .compact();
     }
 
+    @Override
     public void setCookie(HttpServletResponse response, String token)
         throws UnsupportedEncodingException {
         token = URLEncoder.encode(token, "utf-8")

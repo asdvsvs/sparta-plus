@@ -3,7 +3,7 @@ package com.sparta.plus.controller;
 import com.sparta.plus.common.Response;
 import com.sparta.plus.dto.request.MemberLoginReq;
 import com.sparta.plus.dto.request.MemberSignupReq;
-import com.sparta.plus.service.MemberService;
+import com.sparta.plus.service.interfaces.MemberService;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.util.Objects;
