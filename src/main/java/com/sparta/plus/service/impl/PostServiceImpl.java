@@ -3,6 +3,7 @@ package com.sparta.plus.service.impl;
 import com.sparta.plus.dto.request.PostGetPagingReq;
 import com.sparta.plus.dto.response.PostGetRes;
 import com.sparta.plus.entity.Post;
+import com.sparta.plus.repository.PostRepository;
 import com.sparta.plus.service.interfaces.PostService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
