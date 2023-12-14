@@ -1,4 +1,4 @@
-package com.sparta.plus.service.impl;
+package com.sparta.plus.repository;
 
 import com.sparta.plus.entity.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
