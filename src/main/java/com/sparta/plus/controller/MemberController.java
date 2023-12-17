@@ -1,12 +1,13 @@
 package com.sparta.plus.controller;
 
 import com.sparta.plus.common.Response;
+import com.sparta.plus.common.exception.ValidateReq;
+import com.sparta.plus.common.security.JwtUtil;
 import com.sparta.plus.dto.request.MemberLoginReq;
 import com.sparta.plus.dto.request.MemberSignupReq;
 import com.sparta.plus.service.interfaces.MemberService;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,22 +27,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     private final MemberService memberService;
-
-    private static ResponseEntity<Response> validateReq(BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body(new Response(
-                Objects.requireNonNull(
-                    bindingResult.getFieldErrors().stream()
-                        .map((e) -> e.getField() + " : " + e.getDefaultMessage())
-                        .toList().toString()), HttpStatus.BAD_REQUEST.value()));
-        }
-        return null;
-    }
+    private final ValidateReq validateReq;
+    private final JwtUtil jwtUtil;
 
     @PostMapping
     public ResponseEntity<Response> signup(
         @Validated @ModelAttribute MemberSignupReq memberSignupReq, BindingResult bindingResult) {
-        ResponseEntity<Response> reqHasError = validateReq(bindingResult);
+        ResponseEntity<Response> reqHasError = validateReq.validate(bindingResult);
         if (reqHasError != null) {
             return reqHasError;
         }
@@ -55,7 +47,7 @@ public class MemberController {
         HttpServletResponse response) throws UnsupportedEncodingException {
 
         String token = memberService.login(memberLoginReq);
-        memberService.setCookie(response, token);
+        jwtUtil.setCookie(response, token);
         return ResponseEntity.ok().body(new Response("성공", HttpStatus.OK.value()));
 
     }
