@@ -1,21 +1,11 @@
 package com.sparta.plus.service.impl;
 
+import com.sparta.plus.common.security.JwtUtil;
 import com.sparta.plus.dto.request.MemberLoginReq;
 import com.sparta.plus.dto.request.MemberSignupReq;
 import com.sparta.plus.entity.Member;
 import com.sparta.plus.repository.MemberRepository;
 import com.sparta.plus.service.interfaces.MemberService;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.security.Key;
-import java.util.Base64;
-import java.util.Date;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,14 +15,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
-    public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String BEARER_PREFIX = "Bearer ";
-    public static final Long TOKEN_TIME = 60 * 60 * 1000L;
-    private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private String secretKey = "7Iqk7YyM66W07YOA7L2U65Sp7YG065+9U3ByaW5n6rCV7J2Y7Yqc7YSw7LWc7JuQ67mI7J6F64uI64ukLg==";
-    private Key key;
+    private final JwtUtil jwtUtil;
 
     @Override
     public void signup(MemberSignupReq memberSignupReq) {
@@ -62,38 +48,8 @@ public class MemberServiceImpl implements MemberService {
             !passwordEncoder.matches(memberLoginReq.getPassword(), member.getPassword())) {
             throw new IllegalArgumentException("닉네임 또는 패스워드를 확인해주세요");
         }
-        return createToken(member.getMemberName());
+        return jwtUtil.createToken(member.getMemberName());
     }
 
-    @Override
-    @PostConstruct
-    public void init() {
-        byte[] bytes = Base64.getDecoder().decode(secretKey);
-        key = Keys.hmacShaKeyFor(bytes);
-    }
 
-    @Override
-    // 토큰 생성
-    public String createToken(String memberName) {
-        Date date = new Date();
-
-        return BEARER_PREFIX +
-            Jwts.builder()
-                .setSubject(memberName) // 사용자 식별자값(ID)
-//                .claim(AUTHORIZATION_KEY, role) // 사용자 권한
-                .setExpiration(new Date(date.getTime() + TOKEN_TIME)) // 만료 시간
-                .setIssuedAt(date) // 발급일
-                .signWith(key, signatureAlgorithm) // 암호화 알고리즘
-                .compact();
-    }
-
-    @Override
-    public void setCookie(HttpServletResponse response, String token)
-        throws UnsupportedEncodingException {
-        token = URLEncoder.encode(token, "utf-8")
-            .replaceAll("\\+", "//"); // Cookie Value 에는 공백이 불가능해서 encoding 진행
-        Cookie cookie = new Cookie("Authorization", token);
-        cookie.setPath("/");
-        response.addCookie(cookie);
-    }
 }
