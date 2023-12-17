@@ -1,6 +1,7 @@
 package com.sparta.plus.service.impl;
 
 import com.sparta.plus.dto.request.PostGetPagingReq;
+import com.sparta.plus.dto.request.PostSaveReq;
 import com.sparta.plus.dto.response.PostGetRes;
 import com.sparta.plus.entity.Post;
 import com.sparta.plus.repository.PostRepository;
@@ -28,5 +29,16 @@ public class PostServiceImpl implements PostService {
 
         Page<Post> posts = postRepository.findAll(pageable);
         return posts.stream().map(PostGetRes::new).toList();
+    }
+
+    @Override
+    public void savePost(PostSaveReq postSaveReq, String memberName) {
+
+        Post post = Post.builder()
+            .nickname(memberName)
+            .title(postSaveReq.getTitle())
+            .content(postSaveReq.getContent())
+            .build();
+        postRepository.save(post);
     }
 }
