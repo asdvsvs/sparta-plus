@@ -14,7 +14,7 @@ public class PostGetRes extends Response {
 
     public PostGetRes(Post post) {
         this.title = post.getTitle();
-        this.nickname = post.getNickname();
+        this.nickname = post.getMember().getMemberName();
         this.createdTime = post.getCreatedTime();
     }
 }

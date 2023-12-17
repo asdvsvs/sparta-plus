@@ -4,6 +4,7 @@ import com.sparta.plus.dto.request.PostGetPagingReq;
 import com.sparta.plus.dto.request.PostSaveReq;
 import com.sparta.plus.dto.response.PostGetRes;
 import com.sparta.plus.entity.Post;
+import com.sparta.plus.repository.MemberRepository;
 import com.sparta.plus.repository.PostRepository;
 import com.sparta.plus.service.interfaces.PostService;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     public List<PostGetRes> getPosts(PostGetPagingReq req) {
@@ -35,9 +37,9 @@ public class PostServiceImpl implements PostService {
     public void savePost(PostSaveReq postSaveReq, String memberName) {
 
         Post post = Post.builder()
-            .nickname(memberName)
             .title(postSaveReq.getTitle())
             .content(postSaveReq.getContent())
+            .member(memberRepository.findByMemberName(memberName))
             .build();
         postRepository.save(post);
     }
