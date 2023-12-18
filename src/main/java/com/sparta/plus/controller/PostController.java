@@ -1,8 +1,8 @@
 package com.sparta.plus.controller;
 
 import com.sparta.plus.common.Response;
-import com.sparta.plus.common.exception.ValidateReq;
 import com.sparta.plus.common.security.UserDetailsImpl;
+import com.sparta.plus.common.validator.ValidateReq;
 import com.sparta.plus.dto.request.PostGetPagingReq;
 import com.sparta.plus.dto.request.PostSaveReq;
 import com.sparta.plus.dto.response.PostDetailGetRes;

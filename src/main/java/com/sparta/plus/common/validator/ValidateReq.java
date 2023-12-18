@@ -1,4 +1,4 @@
-package com.sparta.plus.common.exception;
+package com.sparta.plus.common.validator;
 
 import com.sparta.plus.common.Response;
 import java.util.Objects;
