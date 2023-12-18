@@ -31,33 +31,33 @@ public class AuthorizationFilter extends OncePerRequestFilter {
         FilterChain filterChain) throws ServletException, IOException {
 
         String token = null;
-        Cookie authCookie = null;
         if (request.getCookies() != null) {
-            authCookie = Arrays.stream(request.getCookies())
+            Cookie authCookie = Arrays.stream(request.getCookies())
                 .filter(cookie -> cookie.getName().equals("Authorization"))
                 .findFirst()
                 .orElse(null);
-        }
-        if (authCookie != null) {
-            token = URLDecoder.decode(authCookie.getValue(), "UTF-8");
-            log.info(token);
-            token = token.substring(6);
-            log.info(token);
-        } else {
-            log.error("인증 쿠키가 없습니다.");
-        }
 
-        // 시큐리티 과정
-        if (token != null) {
-            SecurityContext context = SecurityContextHolder.createEmptyContext();
+            if (authCookie != null) {
+                token = URLDecoder.decode(authCookie.getValue(), "UTF-8");
+                log.info(token);
+                token = token.substring(6);
+                log.info(token);
+            } else {
+                log.error("인증 쿠키가 없습니다.");
+            }
 
-            Claims memberInfo = jwtUtil.getUserInfoFromToken(token);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(
-                memberInfo.getSubject());
-            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails,
-                null);
-            context.setAuthentication(authentication);
-            SecurityContextHolder.setContext(context);
+            // 시큐리티 과정
+            if (token != null) {
+                SecurityContext context = SecurityContextHolder.createEmptyContext();
+
+                Claims memberInfo = jwtUtil.getUserInfoFromToken(token);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(
+                    memberInfo.getSubject());
+                Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails,
+                    null);
+                context.setAuthentication(authentication);
+                SecurityContextHolder.setContext(context);
+            }
         }
 
         filterChain.doFilter(request, response);
