@@ -1,5 +1,6 @@
 package com.sparta.plus.service.impl;
 
+import com.sparta.plus.common.validator.ValidatePost;
 import com.sparta.plus.dto.request.PostGetPagingReq;
 import com.sparta.plus.dto.request.PostSaveReq;
 import com.sparta.plus.dto.response.PostDetailGetRes;
@@ -22,6 +23,7 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
+    private final ValidatePost validatePost;
 
     @Override
     public List<PostGetRes> getPosts(PostGetPagingReq req) {
@@ -48,6 +50,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostDetailGetRes getPostDetail(Long postId) {
         Post post = postRepository.findByPostId(postId);
+        validatePost.validate(post);
         return PostDetailGetRes.builder()
             .title(post.getTitle())
             .memberName(post.getMember().getMemberName())

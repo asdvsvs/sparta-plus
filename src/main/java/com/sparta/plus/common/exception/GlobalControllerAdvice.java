@@ -20,4 +20,10 @@ public class GlobalControllerAdvice {
         Response response = new Response(e.getMessage(), HttpStatus.BAD_REQUEST.value());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler({PostNotFoundException.class})
+    public ResponseEntity<Response> handlerPostNotFoundException(PostNotFoundException e) {
+        Response response = new Response(e.getMessage(), HttpStatus.NOT_FOUND.value());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
 }
