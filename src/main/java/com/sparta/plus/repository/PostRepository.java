@@ -11,4 +11,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Override
     @Query("select p from Post p left join fetch p.member")
     Page<Post> findAll(Pageable pageable);
+
+    @Query("select p from  Post p left join fetch p.member where p.postId = :postId")
+    Post findByPostId(Long postId);
 }

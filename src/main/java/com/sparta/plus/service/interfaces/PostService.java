@@ -2,6 +2,7 @@ package com.sparta.plus.service.interfaces;
 
 import com.sparta.plus.dto.request.PostGetPagingReq;
 import com.sparta.plus.dto.request.PostSaveReq;
+import com.sparta.plus.dto.response.PostDetailGetRes;
 import com.sparta.plus.dto.response.PostGetRes;
 import java.util.List;
 
@@ -15,4 +16,6 @@ public interface PostService {
     List<PostGetRes> getPosts(PostGetPagingReq postGetPagingReq);
 
     void savePost(PostSaveReq postSaveReq, String memberNames);
+
+    PostDetailGetRes getPostDetail(Long postId);
 }

@@ -1,12 +1,11 @@
 package com.sparta.plus.dto.response;
 
-import com.sparta.plus.common.Response;
 import com.sparta.plus.entity.Post;
 import java.time.LocalDateTime;
 import lombok.Getter;
 
 @Getter
-public class PostGetRes extends Response {
+public class PostGetRes {
 
     private String title;
     private String nickname;

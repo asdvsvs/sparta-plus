@@ -2,6 +2,7 @@ package com.sparta.plus.service.impl;
 
 import com.sparta.plus.dto.request.PostGetPagingReq;
 import com.sparta.plus.dto.request.PostSaveReq;
+import com.sparta.plus.dto.response.PostDetailGetRes;
 import com.sparta.plus.dto.response.PostGetRes;
 import com.sparta.plus.entity.Post;
 import com.sparta.plus.repository.MemberRepository;
@@ -42,5 +43,16 @@ public class PostServiceImpl implements PostService {
             .member(memberRepository.findByMemberName(memberName))
             .build();
         postRepository.save(post);
+    }
+
+    @Override
+    public PostDetailGetRes getPostDetail(Long postId) {
+        Post post = postRepository.findByPostId(postId);
+        return PostDetailGetRes.builder()
+            .title(post.getTitle())
+            .memberName(post.getMember().getMemberName())
+            .createdTime(post.getCreatedTime())
+            .content(post.getContent())
+            .build();
     }
 }
