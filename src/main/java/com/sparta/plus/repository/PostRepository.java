@@ -5,8 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.RepositoryDefinition;
 
-public interface PostRepository extends JpaRepository<Post, Long> {
+@RepositoryDefinition(domainClass = Post.class, idClass = Long.class)
+public interface PostRepository extends JpaRepository<Post, Long>, PostRepositoryQuery {
 
     @Override
     @Query("select p from Post p left join fetch p.member")

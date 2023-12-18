@@ -7,6 +7,7 @@ import com.sparta.plus.dto.request.PostGetPagingReq;
 import com.sparta.plus.dto.request.PostSaveReq;
 import com.sparta.plus.dto.response.PostDetailGetRes;
 import com.sparta.plus.dto.response.PostGetRes;
+import com.sparta.plus.dto.response.PostSearchRes;
 import com.sparta.plus.service.interfaces.PostService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -51,5 +52,12 @@ public class PostController {
     @GetMapping("/{postId}")
     public ResponseEntity<PostDetailGetRes> getPostDetail(@PathVariable Long postId) {
         return ResponseEntity.ok().body(postService.getPostDetail(postId));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<PostSearchRes>> searchByContainsTitleAndMember(String title,
+        String memberName) {
+        return ResponseEntity.ok()
+            .body(postService.searchByContainsTitleAndMember(title, memberName));
     }
 }

@@ -5,6 +5,7 @@ import com.sparta.plus.dto.request.PostGetPagingReq;
 import com.sparta.plus.dto.request.PostSaveReq;
 import com.sparta.plus.dto.response.PostDetailGetRes;
 import com.sparta.plus.dto.response.PostGetRes;
+import com.sparta.plus.dto.response.PostSearchRes;
 import com.sparta.plus.entity.Post;
 import com.sparta.plus.repository.MemberRepository;
 import com.sparta.plus.repository.PostRepository;
@@ -57,5 +58,16 @@ public class PostServiceImpl implements PostService {
             .createdTime(post.getCreatedTime())
             .content(post.getContent())
             .build();
+    }
+
+    @Override
+    public List<PostSearchRes> searchByContainsTitleAndMember(String title, String memberName) {
+        List<Post> posts = postRepository.searchByContainsTitleAndMember(title, memberName);
+        return posts.stream().map(post -> PostSearchRes.builder()
+            .postId(post.getPostId())
+            .title(post.getTitle())
+            .memberName(post.getMember().getMemberName())
+            .content(post.getContent())
+            .build()).toList();
     }
 }
