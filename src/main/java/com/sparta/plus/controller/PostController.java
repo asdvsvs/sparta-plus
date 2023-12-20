@@ -6,6 +6,7 @@ import com.sparta.plus.common.validator.ValidateReq;
 import com.sparta.plus.dto.request.PostGetPagingReq;
 import com.sparta.plus.dto.request.PostSaveReq;
 import com.sparta.plus.dto.request.PostSearchPagingReq;
+import com.sparta.plus.dto.request.PostUpdateReq;
 import com.sparta.plus.dto.response.PostDetailGetRes;
 import com.sparta.plus.dto.response.PostGetRes;
 import com.sparta.plus.dto.response.PostSearchRes;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -60,5 +62,12 @@ public class PostController {
         @RequestBody PostSearchPagingReq req) {
         return ResponseEntity.ok()
             .body(postService.searchByContainsTitleAndMember(req));
+    }
+
+    @PatchMapping()
+    public ResponseEntity<Response> updatePost(@RequestBody PostUpdateReq req,
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        postService.updatePost(req, userDetails.getUsername());
+        return ResponseEntity.ok().body(new Response("성공", HttpStatus.OK.value()));
     }
 }

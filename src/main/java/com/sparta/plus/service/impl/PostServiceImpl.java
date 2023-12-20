@@ -4,6 +4,7 @@ import com.sparta.plus.common.validator.ValidatePost;
 import com.sparta.plus.dto.request.PostGetPagingReq;
 import com.sparta.plus.dto.request.PostSaveReq;
 import com.sparta.plus.dto.request.PostSearchPagingReq;
+import com.sparta.plus.dto.request.PostUpdateReq;
 import com.sparta.plus.dto.response.PostDetailGetRes;
 import com.sparta.plus.dto.response.PostGetRes;
 import com.sparta.plus.dto.response.PostSearchRes;
@@ -12,12 +13,14 @@ import com.sparta.plus.repository.MemberRepository;
 import com.sparta.plus.repository.PostRepository;
 import com.sparta.plus.service.interfaces.PostService;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -76,5 +79,20 @@ public class PostServiceImpl implements PostService {
             .memberName(post.getMember().getMemberName())
             .content(post.getContent())
             .build()).toList();
+    }
+
+    @Override
+    @Transactional
+    public void updatePost(PostUpdateReq req, String username) {
+        Post post = postRepository.findByPostId(req.getPostId());
+        validatePost.validate(post);
+        compareUsername(username, post);
+        post.update(req);
+    }
+
+    private void compareUsername(String username, Post post) {
+        if (!Objects.equals(post.getMember().getMemberName(), username)) {
+            throw new IllegalArgumentException("유저가 작성한 글이 아닙니다.");
+        }
     }
 }

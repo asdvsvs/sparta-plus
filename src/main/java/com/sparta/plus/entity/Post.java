@@ -1,5 +1,6 @@
 package com.sparta.plus.entity;
 
+import com.sparta.plus.dto.request.PostUpdateReq;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -27,7 +28,7 @@ public class Post {
     private Long postId;
 
     private String title;
-    
+
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -37,4 +38,9 @@ public class Post {
     @Column(updatable = false)
     @CreationTimestamp
     private LocalDateTime createdTime;
+
+    public void update(PostUpdateReq req) {
+        this.title = req.getTitle();
+        this.content = req.getContent();
+    }
 }
