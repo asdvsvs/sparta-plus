@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -68,6 +69,13 @@ public class PostController {
     public ResponseEntity<Response> updatePost(@RequestBody PostUpdateReq req,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         postService.updatePost(req, userDetails.getUsername());
+        return ResponseEntity.ok().body(new Response("성공", HttpStatus.OK.value()));
+    }
+
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<Response> deletePost(@PathVariable Long postId,
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        postService.deletePost(postId, userDetails.getUsername());
         return ResponseEntity.ok().body(new Response("성공", HttpStatus.OK.value()));
     }
 }

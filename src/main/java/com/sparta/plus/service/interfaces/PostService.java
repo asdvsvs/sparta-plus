@@ -25,4 +25,6 @@ public interface PostService {
     List<PostSearchRes> searchByContainsTitleAndMember(PostSearchPagingReq req);
 
     void updatePost(PostUpdateReq req, String username);
+
+    void deletePost(Long postId, String username);
 }

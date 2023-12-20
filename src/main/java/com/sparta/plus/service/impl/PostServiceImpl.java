@@ -54,8 +54,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDetailGetRes getPostDetail(Long postId) {
-        Post post = postRepository.findByPostId(postId);
-        validatePost.validate(post);
+        Post post = getPost(postId);
         return PostDetailGetRes.builder()
             .title(post.getTitle())
             .memberName(post.getMember().getMemberName())
@@ -84,10 +83,22 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public void updatePost(PostUpdateReq req, String username) {
-        Post post = postRepository.findByPostId(req.getPostId());
-        validatePost.validate(post);
+        Post post = getPost(req.getPostId());
         compareUsername(username, post);
         post.update(req);
+    }
+
+    @Override
+    public void deletePost(Long postId, String username) {
+        Post post = getPost(postId);
+        compareUsername(username, post);
+        postRepository.delete(post);
+    }
+
+    private Post getPost(Long postId) {
+        Post post = postRepository.findByPostId(postId);
+        validatePost.validate(post);
+        return post;
     }
 
     private void compareUsername(String username, Post post) {
