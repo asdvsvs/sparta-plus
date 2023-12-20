@@ -2,6 +2,7 @@ package com.sparta.plus.service.interfaces;
 
 import com.sparta.plus.dto.request.PostGetPagingReq;
 import com.sparta.plus.dto.request.PostSaveReq;
+import com.sparta.plus.dto.request.PostSearchPagingReq;
 import com.sparta.plus.dto.response.PostDetailGetRes;
 import com.sparta.plus.dto.response.PostGetRes;
 import com.sparta.plus.dto.response.PostSearchRes;
@@ -20,5 +21,5 @@ public interface PostService {
 
     PostDetailGetRes getPostDetail(Long postId);
 
-    List<PostSearchRes> searchByContainsTitleAndMember(String title, String memberName);
+    List<PostSearchRes> searchByContainsTitleAndMember(PostSearchPagingReq req);
 }

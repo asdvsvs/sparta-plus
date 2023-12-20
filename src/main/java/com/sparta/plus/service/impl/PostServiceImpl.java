@@ -3,6 +3,7 @@ package com.sparta.plus.service.impl;
 import com.sparta.plus.common.validator.ValidatePost;
 import com.sparta.plus.dto.request.PostGetPagingReq;
 import com.sparta.plus.dto.request.PostSaveReq;
+import com.sparta.plus.dto.request.PostSearchPagingReq;
 import com.sparta.plus.dto.response.PostDetailGetRes;
 import com.sparta.plus.dto.response.PostGetRes;
 import com.sparta.plus.dto.response.PostSearchRes;
@@ -61,8 +62,14 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostSearchRes> searchByContainsTitleAndMember(String title, String memberName) {
-        List<Post> posts = postRepository.searchByContainsTitleAndMember(title, memberName);
+    public List<PostSearchRes> searchByContainsTitleAndMember(PostSearchPagingReq req) {
+
+        Sort.Direction direction = req.isAsc() ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, req.getSortBy());
+        Pageable pageable = PageRequest.of(req.getPage(), req.getSize(), sort);
+
+        Page<Post> posts = postRepository.searchByContainsTitleAndMember(req.getTitle(),
+            req.getMemberName(), pageable);
         return posts.stream().map(post -> PostSearchRes.builder()
             .postId(post.getPostId())
             .title(post.getTitle())

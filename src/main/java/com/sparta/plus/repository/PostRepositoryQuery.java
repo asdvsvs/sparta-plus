@@ -1,9 +1,11 @@
 package com.sparta.plus.repository;
 
 import com.sparta.plus.entity.Post;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface PostRepositoryQuery {
 
-    List<Post> searchByContainsTitleAndMember(String title, String memberName);
+    Page<Post> searchByContainsTitleAndMember(String titleCondition, String memberNameCondition,
+        Pageable pageable);
 }

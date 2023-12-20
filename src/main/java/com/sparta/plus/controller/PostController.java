@@ -5,6 +5,7 @@ import com.sparta.plus.common.security.UserDetailsImpl;
 import com.sparta.plus.common.validator.ValidateReq;
 import com.sparta.plus.dto.request.PostGetPagingReq;
 import com.sparta.plus.dto.request.PostSaveReq;
+import com.sparta.plus.dto.request.PostSearchPagingReq;
 import com.sparta.plus.dto.response.PostDetailGetRes;
 import com.sparta.plus.dto.response.PostGetRes;
 import com.sparta.plus.dto.response.PostSearchRes;
@@ -55,9 +56,9 @@ public class PostController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<PostSearchRes>> searchByContainsTitleAndMember(String title,
-        String memberName) {
+    public ResponseEntity<List<PostSearchRes>> searchByContainsTitleAndMember(
+        @RequestBody PostSearchPagingReq req) {
         return ResponseEntity.ok()
-            .body(postService.searchByContainsTitleAndMember(title, memberName));
+            .body(postService.searchByContainsTitleAndMember(req));
     }
 }
