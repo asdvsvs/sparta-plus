@@ -10,9 +10,8 @@ import org.springframework.data.repository.RepositoryDefinition;
 @RepositoryDefinition(domainClass = Post.class, idClass = Long.class)
 public interface PostRepository extends JpaRepository<Post, Long>, PostRepositoryQuery {
 
-    @Override
     @Query("select p from Post p left join fetch p.member")
-    Page<Post> findAll(Pageable pageable);
+    Page<Post> findAllJoinMember(Pageable pageable);
 
     @Query("select p from  Post p left join fetch p.member where p.postId = :postId")
     Post findByPostId(Long postId);

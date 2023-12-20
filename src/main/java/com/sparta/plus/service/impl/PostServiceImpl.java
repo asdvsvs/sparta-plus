@@ -37,7 +37,7 @@ public class PostServiceImpl implements PostService {
         Sort sort = Sort.by(direction, req.getSortBy());
         Pageable pageable = PageRequest.of(req.getPage(), req.getSize(), sort);
 
-        Page<Post> posts = postRepository.findAll(pageable);
+        Page<Post> posts = postRepository.findAllJoinMember(pageable);
         return posts.stream().map(PostGetRes::new).toList();
     }
 
