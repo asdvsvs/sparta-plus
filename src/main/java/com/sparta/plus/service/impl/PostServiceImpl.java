@@ -96,7 +96,7 @@ public class PostServiceImpl implements PostService {
     }
 
     private Post getPost(Long postId) {
-        Post post = postRepository.findByPostId(postId);
+        Post post = postRepository.findByPostIdFetch(postId);
         validatePost.validate(post);
         return post;
     }
