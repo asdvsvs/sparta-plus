@@ -1,4 +1,4 @@
-package com.sparta.plus.service.interfaces;
+package com.sparta.plus.service;
 
 public interface PostLikeService {
 

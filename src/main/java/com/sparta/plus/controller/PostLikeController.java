@@ -3,7 +3,7 @@ package com.sparta.plus.controller;
 import com.sparta.plus.common.RestResponse;
 import com.sparta.plus.common.security.UserDetailsImpl;
 import com.sparta.plus.dto.request.PostLikeReq;
-import com.sparta.plus.service.interfaces.PostLikeService;
+import com.sparta.plus.service.PostLikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

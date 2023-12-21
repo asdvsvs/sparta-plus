@@ -1,4 +1,4 @@
-package com.sparta.plus.service.interfaces;
+package com.sparta.plus.service;
 
 import com.sparta.plus.dto.request.MemberLoginReq;
 import com.sparta.plus.dto.request.MemberSignupReq;

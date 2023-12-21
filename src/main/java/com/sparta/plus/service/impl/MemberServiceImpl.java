@@ -6,7 +6,7 @@ import com.sparta.plus.dto.request.MemberSignupReq;
 import com.sparta.plus.dto.response.MemberSignupRes;
 import com.sparta.plus.entity.Member;
 import com.sparta.plus.repository.MemberRepository;
-import com.sparta.plus.service.interfaces.MemberService;
+import com.sparta.plus.service.MemberService;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

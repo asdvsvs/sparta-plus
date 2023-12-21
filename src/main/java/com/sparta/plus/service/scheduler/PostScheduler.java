@@ -2,7 +2,7 @@ package com.sparta.plus.service.scheduler;
 
 import com.sparta.plus.entity.Post;
 import com.sparta.plus.repository.PostRepository;
-import com.sparta.plus.service.interfaces.PostService;
+import com.sparta.plus.service.PostService;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

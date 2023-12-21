@@ -6,7 +6,7 @@ import com.sparta.plus.common.validator.ReqValidator;
 import com.sparta.plus.dto.request.MemberLoginReq;
 import com.sparta.plus.dto.request.MemberSignupReq;
 import com.sparta.plus.dto.response.MemberSignupRes;
-import com.sparta.plus.service.interfaces.MemberService;
+import com.sparta.plus.service.MemberService;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import lombok.RequiredArgsConstructor;

@@ -11,7 +11,7 @@ import com.sparta.plus.dto.response.PostSearchRes;
 import com.sparta.plus.entity.Post;
 import com.sparta.plus.repository.MemberRepository;
 import com.sparta.plus.repository.PostRepository;
-import com.sparta.plus.service.interfaces.PostService;
+import com.sparta.plus.service.PostService;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;

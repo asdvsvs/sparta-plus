@@ -11,7 +11,7 @@ import com.sparta.plus.common.validator.ReqValidator;
 import com.sparta.plus.dto.request.MemberLoginReq;
 import com.sparta.plus.dto.request.MemberSignupReq;
 import com.sparta.plus.dto.response.MemberSignupRes;
-import com.sparta.plus.service.interfaces.MemberService;
+import com.sparta.plus.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

@@ -17,7 +17,7 @@ import com.sparta.plus.dto.request.PostUpdateReq;
 import com.sparta.plus.dto.response.PostDetailGetRes;
 import com.sparta.plus.dto.response.PostGetRes;
 import com.sparta.plus.dto.response.PostSearchRes;
-import com.sparta.plus.service.interfaces.PostService;
+import com.sparta.plus.service.PostService;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

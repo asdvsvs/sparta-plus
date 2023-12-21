@@ -7,7 +7,7 @@ import com.sparta.plus.entity.Post;
 import com.sparta.plus.repository.CommentRepository;
 import com.sparta.plus.repository.MemberRepository;
 import com.sparta.plus.repository.PostRepository;
-import com.sparta.plus.service.interfaces.CommentService;
+import com.sparta.plus.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

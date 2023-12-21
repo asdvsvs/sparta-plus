@@ -6,7 +6,7 @@ import com.sparta.plus.entity.PostLike;
 import com.sparta.plus.repository.MemberRepository;
 import com.sparta.plus.repository.PostLikeRepository;
 import com.sparta.plus.repository.PostRepository;
-import com.sparta.plus.service.interfaces.PostLikeService;
+import com.sparta.plus.service.PostLikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
