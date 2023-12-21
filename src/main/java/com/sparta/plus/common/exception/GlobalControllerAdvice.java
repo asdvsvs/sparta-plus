@@ -1,6 +1,6 @@
 package com.sparta.plus.common.exception;
 
-import com.sparta.plus.common.Response;
+import com.sparta.plus.common.RestResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -10,20 +10,22 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalControllerAdvice {
 
     @ExceptionHandler({IllegalArgumentException.class})
-    public ResponseEntity<Response> handleIllegalArgumentException(IllegalArgumentException e) {
-        Response response = new Response(e.getMessage(), HttpStatus.BAD_REQUEST.value());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<RestResponse> handleIllegalArgumentException(IllegalArgumentException e) {
+        RestResponse restResponse = new RestResponse(e.getMessage(),
+            HttpStatus.BAD_REQUEST.value());
+        return new ResponseEntity<>(restResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({NullPointerException.class})
-    public ResponseEntity<Response> handlerNullPointerException(NullPointerException e) {
-        Response response = new Response(e.getMessage(), HttpStatus.BAD_REQUEST.value());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<RestResponse> handlerNullPointerException(NullPointerException e) {
+        RestResponse restResponse = new RestResponse(e.getMessage(),
+            HttpStatus.BAD_REQUEST.value());
+        return new ResponseEntity<>(restResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({PostNotFoundException.class})
-    public ResponseEntity<Response> handlerPostNotFoundException(PostNotFoundException e) {
-        Response response = new Response(e.getMessage(), HttpStatus.NOT_FOUND.value());
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    public ResponseEntity<RestResponse> handlerPostNotFoundException(PostNotFoundException e) {
+        RestResponse restResponse = new RestResponse(e.getMessage(), HttpStatus.NOT_FOUND.value());
+        return new ResponseEntity<>(restResponse, HttpStatus.NOT_FOUND);
     }
 }

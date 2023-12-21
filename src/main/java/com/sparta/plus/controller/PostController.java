@@ -1,8 +1,8 @@
 package com.sparta.plus.controller;
 
-import com.sparta.plus.common.Response;
+import com.sparta.plus.common.RestResponse;
 import com.sparta.plus.common.security.UserDetailsImpl;
-import com.sparta.plus.common.validator.ValidateReq;
+import com.sparta.plus.common.validator.ReqValidator;
 import com.sparta.plus.dto.request.PostGetPagingReq;
 import com.sparta.plus.dto.request.PostSaveReq;
 import com.sparta.plus.dto.request.PostSearchPagingReq;
@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostController {
 
     private final PostService postService;
-    private final ValidateReq validateReq;
+    private final ReqValidator reqValidator;
 
     @GetMapping
     public ResponseEntity<List<PostGetRes>> getPosts(
@@ -41,16 +41,16 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity<Response> savePost(@RequestBody PostSaveReq postSaveReq,
+    public ResponseEntity<RestResponse> savePost(@RequestBody PostSaveReq postSaveReq,
         BindingResult bindingResult,
         @AuthenticationPrincipal
         UserDetailsImpl userDetails) {
-        ResponseEntity<Response> reqHasError = validateReq.validate(bindingResult);
+        ResponseEntity<RestResponse> reqHasError = reqValidator.validate(bindingResult);
         if (reqHasError != null) {
             return reqHasError;
         }
         postService.savePost(postSaveReq, userDetails.getUsername());
-        return ResponseEntity.ok().body(new Response("성공", HttpStatus.OK.value()));
+        return ResponseEntity.ok().body(new RestResponse("성공", HttpStatus.OK.value()));
     }
 
     @GetMapping("/{postId}")
@@ -66,16 +66,16 @@ public class PostController {
     }
 
     @PatchMapping()
-    public ResponseEntity<Response> updatePost(@RequestBody PostUpdateReq req,
+    public ResponseEntity<RestResponse> updatePost(@RequestBody PostUpdateReq req,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         postService.updatePost(req, userDetails.getUsername());
-        return ResponseEntity.ok().body(new Response("성공", HttpStatus.OK.value()));
+        return ResponseEntity.ok().body(new RestResponse("성공", HttpStatus.OK.value()));
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseEntity<Response> deletePost(@PathVariable Long postId,
+    public ResponseEntity<RestResponse> deletePost(@PathVariable Long postId,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         postService.deletePost(postId, userDetails.getUsername());
-        return ResponseEntity.ok().body(new Response("성공", HttpStatus.OK.value()));
+        return ResponseEntity.ok().body(new RestResponse("성공", HttpStatus.OK.value()));
     }
 }

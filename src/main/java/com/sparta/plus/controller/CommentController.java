@@ -1,6 +1,6 @@
 package com.sparta.plus.controller;
 
-import com.sparta.plus.common.Response;
+import com.sparta.plus.common.RestResponse;
 import com.sparta.plus.common.security.UserDetailsImpl;
 import com.sparta.plus.dto.request.CommentSaveReq;
 import com.sparta.plus.service.interfaces.CommentService;
@@ -21,9 +21,9 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<Response> saveComment(@RequestBody CommentSaveReq req,
+    public ResponseEntity<RestResponse> saveComment(@RequestBody CommentSaveReq req,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         commentService.saveComment(req, userDetails.getUsername());
-        return ResponseEntity.ok().body(new Response("성공", HttpStatus.OK.value()));
+        return ResponseEntity.ok().body(new RestResponse("성공", HttpStatus.OK.value()));
     }
 }
