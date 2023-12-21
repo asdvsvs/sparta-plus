@@ -45,9 +45,9 @@ public class PostController {
         BindingResult bindingResult,
         @AuthenticationPrincipal
         UserDetailsImpl userDetails) {
-        ResponseEntity<RestResponse> reqHasError = reqValidator.validate(bindingResult);
+        RestResponse reqHasError = reqValidator.validate(bindingResult);
         if (reqHasError != null) {
-            return reqHasError;
+            return ResponseEntity.badRequest().body(reqHasError);
         }
         postService.savePost(postSaveReq, userDetails.getUsername());
         return ResponseEntity.ok().body(new RestResponse("성공", HttpStatus.OK.value()));
