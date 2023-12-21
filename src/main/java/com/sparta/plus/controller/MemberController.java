@@ -1,10 +1,11 @@
 package com.sparta.plus.controller;
 
-import com.sparta.plus.common.Response;
+import com.sparta.plus.common.RestResponse;
 import com.sparta.plus.common.security.JwtUtil;
-import com.sparta.plus.common.validator.ValidateReq;
+import com.sparta.plus.common.validator.ReqValidator;
 import com.sparta.plus.dto.request.MemberLoginReq;
 import com.sparta.plus.dto.request.MemberSignupReq;
+import com.sparta.plus.dto.response.MemberSignupRes;
 import com.sparta.plus.service.interfaces.MemberService;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
@@ -27,28 +28,28 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     private final MemberService memberService;
-    private final ValidateReq validateReq;
+    private final ReqValidator reqValidator;
     private final JwtUtil jwtUtil;
 
     @PostMapping
-    public ResponseEntity<Response> signup(
+    public ResponseEntity<MemberSignupRes> signup(
         @Validated @ModelAttribute MemberSignupReq memberSignupReq, BindingResult bindingResult) {
-        ResponseEntity<Response> reqHasError = validateReq.validate(bindingResult);
+        RestResponse reqHasError = reqValidator.validate(bindingResult);
         if (reqHasError != null) {
-            return reqHasError;
+            return ResponseEntity.badRequest()
+                .body(new MemberSignupRes());
         }
 
-        memberService.signup(memberSignupReq);
-        return ResponseEntity.ok().body(new Response("성공", HttpStatus.OK.value()));
+        return ResponseEntity.ok().body(memberService.signup(memberSignupReq));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Response> login(@RequestBody MemberLoginReq memberLoginReq,
+    public ResponseEntity<RestResponse> login(@RequestBody MemberLoginReq memberLoginReq,
         HttpServletResponse response) throws UnsupportedEncodingException {
 
         String token = memberService.login(memberLoginReq);
         jwtUtil.setCookie(response, token);
-        return ResponseEntity.ok().body(new Response("성공", HttpStatus.OK.value()));
+        return ResponseEntity.ok().body(new RestResponse("성공", HttpStatus.OK.value()));
 
     }
 

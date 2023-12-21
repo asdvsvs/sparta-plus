@@ -3,6 +3,7 @@ package com.sparta.plus.service.impl;
 import com.sparta.plus.common.security.JwtUtil;
 import com.sparta.plus.dto.request.MemberLoginReq;
 import com.sparta.plus.dto.request.MemberSignupReq;
+import com.sparta.plus.dto.response.MemberSignupRes;
 import com.sparta.plus.entity.Member;
 import com.sparta.plus.repository.MemberRepository;
 import com.sparta.plus.service.interfaces.MemberService;
@@ -21,7 +22,7 @@ public class MemberServiceImpl implements MemberService {
     private final JwtUtil jwtUtil;
 
     @Override
-    public void signup(MemberSignupReq memberSignupReq) {
+    public MemberSignupRes signup(MemberSignupReq memberSignupReq) {
 
         if (Objects.equals(memberSignupReq.getMemberName(), memberSignupReq.getPassword())) {
             throw new IllegalArgumentException("이름과 동일한 비밀번호 설정 불가");
@@ -39,6 +40,7 @@ public class MemberServiceImpl implements MemberService {
             .password(encodePassword)
             .email(memberSignupReq.getEmail())
             .build());
+        return MemberSignupRes.builder().memberName(memberSignupReq.getMemberName()).build();
     }
 
     @Override

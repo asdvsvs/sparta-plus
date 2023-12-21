@@ -2,6 +2,7 @@ package com.sparta.plus.service.interfaces;
 
 import com.sparta.plus.dto.request.MemberLoginReq;
 import com.sparta.plus.dto.request.MemberSignupReq;
+import com.sparta.plus.dto.response.MemberSignupRes;
 
 public interface MemberService {
 
@@ -10,7 +11,7 @@ public interface MemberService {
      *
      * @param memberSignupReq 회원 가입 요청정보
      */
-    void signup(MemberSignupReq memberSignupReq);
+    MemberSignupRes signup(MemberSignupReq memberSignupReq);
 
     /**
      * 로그인
