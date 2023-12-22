@@ -1,26 +1,33 @@
 package com.sparta.plus.service.impl;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.sparta.plus.common.validator.ValidatePost;
 import com.sparta.plus.dto.request.PostGetPagingReq;
+import com.sparta.plus.dto.request.PostImageUploadReq;
 import com.sparta.plus.dto.request.PostSaveReq;
 import com.sparta.plus.dto.request.PostSearchPagingReq;
 import com.sparta.plus.dto.request.PostUpdateReq;
 import com.sparta.plus.dto.response.PostDetailGetRes;
 import com.sparta.plus.dto.response.PostGetRes;
 import com.sparta.plus.dto.response.PostSearchRes;
+import com.sparta.plus.entity.Member;
 import com.sparta.plus.entity.Post;
 import com.sparta.plus.repository.MemberRepository;
 import com.sparta.plus.repository.PostRepository;
 import com.sparta.plus.service.PostService;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +36,9 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     private final ValidatePost validatePost;
+    private final AmazonS3 amazonS3;
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
 
     @Override
     public List<PostGetRes> getPosts(PostGetPagingReq req) {
@@ -93,6 +103,24 @@ public class PostServiceImpl implements PostService {
         Post post = getPost(postId);
         compareUsername(username, post);
         postRepository.delete(post);
+    }
+
+    @Override
+    @Transactional
+    public void imageUpload(MultipartFile multipartFile, PostImageUploadReq req, Member member)
+        throws IOException {
+        Post post = getPost(req.getPostId());
+        if (!Objects.equals(post.getMember().getMemberName(), member.getMemberName())) {
+            throw new IllegalArgumentException("사용자가 일치하지 않습니다.");
+        }
+        String originalFilename = multipartFile.getOriginalFilename();
+
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(multipartFile.getSize());
+        metadata.setContentType(multipartFile.getContentType());
+
+        amazonS3.putObject(bucket, originalFilename, multipartFile.getInputStream(), metadata);
+        post.imageUpload(amazonS3.getUrl(bucket, originalFilename).toString());
     }
 
     private Post getPost(Long postId) {

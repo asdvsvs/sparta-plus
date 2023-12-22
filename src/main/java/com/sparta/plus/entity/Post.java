@@ -35,6 +35,8 @@ public class Post {
 
     private String content;
 
+    private String imageUrl;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "memberId")
     private Member member;
@@ -54,5 +56,9 @@ public class Post {
     public void update(PostUpdateReq req) {
         this.title = req.getTitle();
         this.content = req.getContent();
+    }
+
+    public void imageUpload(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

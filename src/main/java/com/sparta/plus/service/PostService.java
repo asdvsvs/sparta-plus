@@ -1,13 +1,17 @@
 package com.sparta.plus.service;
 
 import com.sparta.plus.dto.request.PostGetPagingReq;
+import com.sparta.plus.dto.request.PostImageUploadReq;
 import com.sparta.plus.dto.request.PostSaveReq;
 import com.sparta.plus.dto.request.PostSearchPagingReq;
 import com.sparta.plus.dto.request.PostUpdateReq;
 import com.sparta.plus.dto.response.PostDetailGetRes;
 import com.sparta.plus.dto.response.PostGetRes;
 import com.sparta.plus.dto.response.PostSearchRes;
+import com.sparta.plus.entity.Member;
+import java.io.IOException;
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface PostService {
 
@@ -27,4 +31,7 @@ public interface PostService {
     void updatePost(PostUpdateReq req, String username);
 
     void deletePost(Long postId, String username);
+
+    void imageUpload(MultipartFile multipartFile, PostImageUploadReq req, Member member)
+        throws IOException;
 }
